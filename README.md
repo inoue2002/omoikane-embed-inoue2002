@@ -1,4 +1,6 @@
-# Omoikane Embed
+# Omoikane Embed - inoue2002
+
+- 個人Scrapbox youkan-brainに対してGitHubAcrions経由でAIが生成したレポートを書き込んでくれる
 
 This is a tool to embed contents in a Scrapbox project into vector space.
 It was made for [Omoikane](https://scrapbox.io/omoikane/) scrapbox project.
