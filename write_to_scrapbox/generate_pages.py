@@ -1,9 +1,10 @@
+import datetime
+import json
+import os
+import time
+
 import dotenv
 import openai
-import time
-import os
-import json
-import datetime
 
 dotenv.load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -11,8 +12,15 @@ PROJECT = os.getenv("PROJECT_NAME")
 assert OPENAI_API_KEY and PROJECT
 openai.api_key = OPENAI_API_KEY
 
-PROMPT = """You are a member of this community. Read following information. Make human-friendly report in Japanese. Constraint: Explain digest of some interesting updated pages. You should explain why those are interesting. And then add your opinions and questions. You should ask at least one question.
-### contents of updated pages
+PROMPT = """Read the following updated pages, then provide a nuanced and critical feedback in Japanese.
+Choose 5 pages that you think are interesting, and then give feedbacks.
+Tips:
+- Concise Summary: Extract and summarize key points.
+- Interesting Points: Discuss specific enlightening contents and their importance.
+- Alternative Strategies: Suggest other methodologies, ideas or strategies for enhancing insights.
+- Critical Analysis: Identify and analyze any potential gaps or oversights.
+- Engaging Questions: Pose thought-provoking questions aimed at stimulating deeper discussion on the topic. Ensure this question opens avenues for further exploration and critical thought.
+- Ensure the feedback is supportive and provides actionable insights for future research and thoughts.
 {digest_str}
 """
 
