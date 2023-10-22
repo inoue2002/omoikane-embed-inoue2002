@@ -3,7 +3,7 @@ name: Embed
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 21 * * *'  # JST 6:00
+    - cron: '0 21 * * *' # JST 6:00
 
 env:
   SID: ${{ secrets.SID }}
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          lfs: true        
+          lfs: true
 
       - uses: actions/setup-python@v4
         with:
@@ -33,9 +33,8 @@ jobs:
       - name: Export from Scrapbox(/PROJECT_NAME to PROJECT_NAME.json)
         run: export_from_scrapbox/start.sh
 
-
       - name: Authenticate for gh
-        run: gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
+        run: gh auth login --with-token <<< "${{ secrets.OMOIKANE_INOUE }}"
 
       - name: Download Latest Release  if exists (get PROJECT_NAME.pickle for cache)
         run: |
@@ -58,7 +57,6 @@ jobs:
 
       - name: Embed (PROJECT_NAME.json to PROJECT_NAME.pickle)
         run: python make_vecs_from_json/main.py
-
 
       - name: Set up Git
         run: |
@@ -86,7 +84,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.OMOIKANE_INOUE }} # This token is provided by Actions, you do not need to create your own token
         with:
           tag_name: latest
           release_name: Release
@@ -94,21 +92,18 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
-        id: upload_release_asset 
+        id: upload_release_asset
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.OMOIKANE_INOUE }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./${{ secrets.PROJECT_NAME }}.pickle
           asset_name: ${{ secrets.PROJECT_NAME }}.pickle
           asset_content_type: application/octet-stream
-
 
       - name: Upload (PROJECT_NAME.pickle to Qdrant)
         run: python upload_vecs/main.py
 
       - name: Generate Report and write (PROJECT_NAME.json to Scrapbox)
         run: python write_to_scrapbox/main.py
-
-
